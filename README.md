@@ -1,45 +1,55 @@
+📬 Gmail Manager AI – Smart Email Summarizer & Calendar Assistant
 
-# 📬 Gmail Manager AI
-
-**Gmail Manager AI** is a Streamlit-based app that helps users analyze emails by extracting key details like deadlines, tags, suggested replies, and summaries using basic NLP techniques.
-
----
-
-## 🚀 Features
-
-- 🧠 Extracts important **dates/deadlines**
-- 🏷️ Automatically tags emails (e.g., Project, Meeting, Deadline)
-- 💬 Suggests short, context-aware auto-replies
-- 📝 Summarizes the email using **Latent Semantic Analysis (LSA)**
-- 🗓️ Saves the extracted data to a CSV calendar
-- 📊 Built-in calendar view to manage tasks
+Gmail Manager AI is a smart Streamlit app that reads emails, extracts deadlines, suggests replies, tags messages, and generates NLP-based summaries. Designed for professionals and students, it helps manage your inbox by converting unstructured emails into structured calendar entries.
 
 ---
 
-## 🧪 Tech Stack
+🚀 Features
 
-- **Frontend**: Streamlit
-- **NLP**: Sumy (LSA), NLTK, Regex
-- **Storage**: CSV file (`calendar.csv`)
-- **Other**: Python standard libraries
+* ✍️ Paste email text directly into the app
+* 📅 Deadline extractor using regex patterns
+* 🏷️ Tag generator (Project, Meeting, Deadline, etc.)
+* 💬 Auto-reply suggestions based on email content
+* 🧠 NLP-based summarization (using Sumy + NLTK)
+* 📊 Calendar-style table saved to `calendar.csv`
+* 📂 View your scheduled entries inside the app
 
 ---
 
-## ⚙️ Requirements
+📁 File Structure
 
-Install all required packages with:
+```
+gmail-manager/
+├── gmail_manager.py             # Main Streamlit application
+├── requirements.txt             # Project dependencies
+├── devcontainer.json            # VSCode DevContainer config
+├── calendar.csv                 # Generated calendar entries (auto-created)
+├── README.md                    # Project overview (this file)
+```
+
+---
+
+🧪 Example Use
+
+1. Paste your email into the app
+2. Click “🧠 Process Email”
+3. See:
+   * 📅 Extracted deadline
+   * 🏷️ Generated tags
+   * 💬 Suggested reply
+   * 🧠 AI-generated summary
+   * 📊 Calendar entry table
+
+---
+
+🖥️ Run the App Locally
 
 ```bash
 pip install -r requirements.txt
+streamlit run gmail_manager.py
 ```
 
-Or manually install:
-
-```bash
-pip install streamlit pandas ics streamlit-calendar sumy nltk
-```
-
-Also, run the following once in your script to avoid NLTK errors:
+*If `nltk` data is not found, run:*
 
 ```python
 import nltk
@@ -48,33 +58,32 @@ nltk.download('punkt')
 
 ---
 
-## 🧾 How to Use
+🌐 Online Deployment
 
-1. Run the app with:
-```bash
-streamlit run Gmail_Manager.py
-```
+Easily deploy on [Streamlit Cloud](https://streamlit.io):
 
-2. Paste your email in the text box.
-3. Click "🧠 Process Email" to extract insights.
-4. View summary, tags, reply suggestion, and see it saved to calendar.
+1. Push to GitHub
+2. Deploy your repo
+3. Set `gmail_manager.py` as the main file
 
 ---
 
-## 📂 File Structure
+🎓 Sample Use Case
 
-- `Gmail_Manager.py` – Main application logic
-- `calendar.csv` – Stores your processed email details
-- `requirements.txt` – All Python dependencies
+Gmail Manager AI can help:
 
----
-
-## 🛠 Dev Container Support
-
-Includes a `.devcontainer.json` file for running in VSCode + GitHub Codespaces with preinstalled Python environment.
+* Students keep track of assignment deadlines
+* Professionals organize meeting requests
+* Anyone who receives long emails quickly get summaries and calendar reminders
 
 ---
 
-## 👤 Author
+👨‍💻 Author
 
-Developed for educational and productivity enhancement purposes.
+* N. Lahiri
+
+---
+
+📜 License
+
+This project is intended for personal productivity and demo purposes. For production, email authentication, Gmail API integration, and encryption should be considered.
