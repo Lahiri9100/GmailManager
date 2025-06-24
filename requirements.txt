@@ -1,0 +1,6 @@
+streamlit
+pandas
+ics
+streamlit-calendar
+sumy
+nltk
