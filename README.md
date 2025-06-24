@@ -41,31 +41,6 @@ gmail-manager/
    * 📊 Calendar entry table
 
 ---
-
-🖥️ Run the App Locally
-
-```bash
-pip install -r requirements.txt
-streamlit run gmail_manager.py
-```
-
-*If `nltk` data is not found, run:*
-
-```python
-import nltk
-nltk.download('punkt')
-```
-
----
-
-🌐 Online Deployment
-
-Easily deploy on [Streamlit Cloud](https://streamlit.io):
-
-1. Push to GitHub
-2. Deploy your repo
-3. Set `gmail_manager.py` as the main file
-
 ---
 
 🎓 Sample Use Case
