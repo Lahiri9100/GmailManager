@@ -1,4 +1,5 @@
-📬 Gmail Manager AI – Smart Email Summarizer & Calendar Assistant
+#📬 Gmail Manager AI 
+– Smart Email Summarizer & Calendar Assistant
 
 Gmail Manager AI is a smart Streamlit app that reads emails, extracts deadlines, suggests replies, tags messages, and generates NLP-based summaries. Designed for professionals and students, it helps manage your inbox by converting unstructured emails into structured calendar entries.
 
