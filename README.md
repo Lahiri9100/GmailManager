@@ -41,7 +41,6 @@ gmail-manager/
    * 📊 Calendar entry table
 
 ---
----
 
 🎓 Sample Use Case
 
