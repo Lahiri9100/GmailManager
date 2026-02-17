@@ -6,8 +6,14 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 import nltk
-nltk.download('punkt')
 
+nltk_packages = ["punkt", "punkt_tab"]
+
+for pkg in nltk_packages:
+    try:
+        nltk.data.find(f"tokenizers/{pkg}")
+    except LookupError:
+        nltk.download(pkg)
 def generate_summary(text):
     try:
         cleaned = clean_email_text(text)
