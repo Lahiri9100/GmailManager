@@ -1,89 +1,83 @@
-# 📬 Gmail Manager AI – Smart Email Summarizer & Calendar Assistant
+# 📩 Gmail Manager AI
 
-Gmail Manager AI is a smart Streamlit app that reads emails, extracts deadlines, suggests replies, tags messages, and generates NLP-based summaries. Designed for professionals and students, it helps manage your inbox by converting unstructured emails into structured calendar entries.
+An AI-powered email productivity assistant built using Python, Streamlit, NLP, and SQLite.
 
----
+This project analyzes unstructured email content and performs intelligent processing such as:
+- email summarization
+- deadline extraction
+- smart tagging
+- auto-reply generation
+- active deadline tracking
+- user-specific analysis history
 
-🚀 Features
-
-* ✍️ Paste email text directly into the app
-* 📅 Deadline extractor using regex patterns
-* 🏷️ Tag generator (Project, Meeting, Deadline, etc.)
-* 💬 Auto-reply suggestions based on email content
-* 🧠 NLP-based summarization (using Sumy + NLTK)
-* 📊 Calendar-style table saved to `calendar.csv`
-* 📂 View your scheduled entries inside the app
+The system is designed as a **privacy-focused local prototype** without direct Gmail account integration.
 
 ---
 
-📁 File Structure
+# 🚀 Features
 
-```
-gmail-manager/
-├── gmail_manager.py             # Main Streamlit application
-├── requirements.txt             # Project dependencies
-├── devcontainer.json            # VSCode DevContainer config
-├── calendar.csv                 # Generated calendar entries (auto-created)
-├── README.md                    # Project overview (this file)
-```
+## 🔐 User Authentication
+- User registration and login system
+- Password hashing using bcrypt
+- User-specific email history storage
 
 ---
 
-🧪 Example Use
+## 🧠 NLP-Based Email Processing
+The application performs intelligent processing on pasted email content using NLP techniques.
 
-1. Paste your email into the app
-2. Click “🧠 Process Email”
-3. See:
-   * 📅 Extracted deadline
-   * 🏷️ Generated tags
-   * 💬 Suggested reply
-   * 🧠 AI-generated summary
-   * 📊 Calendar entry table
+### Supported capabilities:
+- Email summarization
+- Deadline extraction
+- Smart categorization/tagging
+- Suggested auto replies
 
 ---
 
-🖥️ Run the App Locally
+## 📌 Active Deadlines Dashboard
+- Automatically tracks upcoming deadlines
+- Filters expired deadlines dynamically
+- Supports multiple date formats
 
-```bash
-pip install -r requirements.txt
-streamlit run gmail_manager.py
-```
-
-*If `nltk` data is not found, run:*
-
-```python
-import nltk
-nltk.download('punkt')
-```
+### Supported Date Formats
+- June 5th
+- 5 June 2026
+- Jun 5
+- 5 Jun
+- May 28th, 2026
 
 ---
 
-🌐 Online Deployment
-
-Easily deploy on [Streamlit Cloud](https://streamlit.io):
-
-1. Push to GitHub
-2. Deploy your repo
-3. Set `gmail_manager.py` as the main file
+## 📁 Full Analysis History
+- Stores processed email history
+- User-specific persistent storage
+- SQLite-based local database
 
 ---
 
-🎓 Sample Use Case
+# 🛠️ Tech Stack
 
-Gmail Manager AI can help:
-
-* Students keep track of assignment deadlines
-* Professionals organize meeting requests
-* Anyone who receives long emails quickly get summaries and calendar reminders
-
----
-
-👨‍💻 Author
-
-* N. Lahiri
+| Technology | Purpose |
+|---|---|
+| Python | Core backend logic |
+| Streamlit | Web application UI |
+| SQLite | Local database storage |
+| NLTK | NLP preprocessing |
+| Sumy | Text summarization |
+| Pandas | Data handling |
+| Regex | Deadline extraction |
 
 ---
 
-📜 License
+# 🧩 Project Architecture
 
-This project is intended for personal productivity and demo purposes. For production, email authentication, Gmail API integration, and encryption should be considered.
+```text
+User Input
+     ↓
+NLP Processing Layer
+     ↓
+Summarization + Tagging + Deadline Extraction
+     ↓
+SQLite Database Storage
+     ↓
+Active Deadline Dashboard + Analysis History

@@ -6,8 +6,13 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 import nltk
-
-from database import init_db, save_email, load_emails
+from auth import create_users_table, register_user, login_user
+from database import (
+    init_db,
+    save_email,
+    load_emails,
+    load_active_deadlines
+)
 
 # ---------------- NLTK SETUP ----------------
 
@@ -22,7 +27,9 @@ for pkg in nltk_packages:
 # ---------------- DATABASE INIT ----------------
 
 init_db()
-
+create_users_table()
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 # ---------------- NLP FUNCTIONS ----------------
 
 def clean_email_text(text):
@@ -105,83 +112,191 @@ def generate_reply(text):
     else:
         return "Got it. Thank you!"
 
-# ---------------- STREAMLIT UI ----------------
+# ---------------- AUTH SECTION ----------------
 
-st.title("📩 Gmail Manager AI")
+if not st.session_state.logged_in:
 
-st.markdown(
-    """
-This AI assistant reads your emails, finds deadlines,
-tags, summaries, replies, and stores analysis history locally.
-"""
-)
+    st.title("🔐 Gmail Manager AI Login")
 
-email_input = st.text_area(
-    "📬 Paste your email here:",
-    height=200
-)
+    auth_mode = st.sidebar.selectbox(
+        "Choose Option",
+        ["Login", "Register"]
+    )
 
-if st.button("🧠 Process Email"):
+    username = st.text_input("Username")
 
-    if email_input.strip() == "":
-        st.warning("Please paste an email first.")
+    password = st.text_input(
+        "Password",
+        type="password"
+    )
+
+    if auth_mode == "Register":
+
+        if st.button("Create Account"):
+
+            if username and password:
+
+                success = register_user(
+                    username,
+                    password
+                )
+
+                if success:
+                    st.success("✅ Account created successfully.")
+
+                else:
+                    st.error("❌ Username already exists.")
+
+            else:
+                st.warning("Please fill all fields.")
 
     else:
 
-        deadline = extract_date(email_input)
+        if st.button("Login"):
 
-        tags = tag_email(email_input)
+            if login_user(username, password):
 
-        reply = generate_reply(email_input)
+                st.session_state.logged_in = True
+                st.session_state.username = username
 
-        summary = generate_summary(email_input)
+                st.rerun()
 
-        # -------- SAVE TO SQLITE DATABASE --------
+            else:
+                st.error("❌ Invalid username or password.")
 
-        save_email(
-            deadline,
-            ", ".join(tags),
-            reply,
-            summary
-        )
+# ---------------- MAIN APPLICATION ----------------
 
-        # -------- OUTPUT --------
+else:
 
-        st.success("✅ Email analyzed and stored successfully.")
+    st.sidebar.success(
+        f"Logged in as {st.session_state.username}"
+    )
 
-        st.write("**📅 Deadline:**", deadline)
+    if st.sidebar.button("Logout"):
 
-        st.write("**🏷️ Tags:**", ", ".join(tags))
+        st.session_state.logged_in = False
 
-        st.write("**💬 Suggested Reply:**", reply)
+        st.rerun()
 
-        st.write("**📋 Summary:**")
+    st.title("📩 Gmail Manager AI")
 
-        st.info(summary)
+    st.markdown(
+        """
+    This AI assistant reads your emails,
+    finds deadlines, tags, summaries,
+    replies, and stores analysis history locally.
+    """
+    )
 
-# ---------------- HISTORY SECTION ----------------
+    email_input = st.text_area(
+        "📬 Paste your email here:",
+        height=200
+    )
 
-with st.expander("📁 View Analysis History"):
+    if st.button("🧠 Process Email"):
 
-    history = load_emails()
+        if email_input.strip() == "":
+            st.warning("Please paste an email first.")
 
-    if history:
+        else:
 
-        history_df = pd.DataFrame(
-            history,
+            deadline = extract_date(email_input)
+
+            tags = tag_email(email_input)
+
+            reply = generate_reply(email_input)
+
+            summary = generate_summary(email_input)
+
+            save_email(
+                st.session_state.username,
+                deadline,
+                ", ".join(tags),
+                reply,
+                summary
+            )
+
+            st.success(
+                "✅ Email analyzed and stored successfully."
+            )
+
+            st.write("**📅 Deadline:**", deadline)
+
+            st.write("**🏷️ Tags:**", ", ".join(tags))
+
+            st.write("**💬 Suggested Reply:**", reply)
+
+            st.write("**📋 Summary:**")
+
+            st.info(summary)
+
+        # ---------------- ACTIVE DEADLINES ----------------
+
+    st.subheader("📌 Active Deadlines")
+
+    active_deadlines = load_active_deadlines(
+        st.session_state.username
+    )
+
+    if active_deadlines:
+
+        active_df = pd.DataFrame(
+            active_deadlines,
             columns=[
                 "Deadline",
                 "Tags",
-                "Suggested Reply",
                 "Summary",
                 "Created At"
             ]
         )
-        history_df["Summary"] = history_df["Summary"].str[:80] + "..."
+
+        active_df["Summary"] = (
+            active_df["Summary"]
+            .astype(str)
+            .str[:80] + "..."
+        )
+
         st.dataframe(
-            history_df,
+            active_df,
             width="stretch"
         )
 
     else:
-        st.info("No history available yet.")
+
+        st.info("No active deadlines.")
+
+    # ---------------- FULL HISTORY ----------------
+
+    with st.expander("📁 Full Analysis History"):
+
+        history = load_emails(
+            st.session_state.username
+        )
+
+        if history:
+
+            history_df = pd.DataFrame(
+                history,
+                columns=[
+                    "Deadline",
+                    "Tags",
+                    "Suggested Reply",
+                    "Summary",
+                    "Created At"
+                ]
+            )
+
+            history_df["Summary"] = (
+                history_df["Summary"]
+                .astype(str)
+                .str[:80] + "..."
+            )
+
+            st.dataframe(
+                history_df,
+                width="stretch"
+            )
+
+        else:
+
+            st.info("No history available yet.")
