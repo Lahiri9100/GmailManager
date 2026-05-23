@@ -180,7 +180,7 @@ with st.expander("📁 View Analysis History"):
         history_df["Summary"] = history_df["Summary"].str[:80] + "..."
         st.dataframe(
             history_df,
-            use_container_width=True
+            width="stretch"
         )
 
     else:
